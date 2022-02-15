@@ -7,11 +7,13 @@ targets:
     builders:
       prebuild_code_generator:string_res_builder:
         options:
-          # The strings resource path for multi-language.
+          # The string resources path for multi-language.
           input_path:
-            en_US: "assets/strings"
+            en: "assets/strings/strings_en.json"
+            zh: "assets/strings/strings_zh.json"
           # The directory for the generated code
           output_dir: "lib/res_gen"
-          # The default language. It must has a corresponding configuration in [input_path].
-          # The default value is "en_US" if not configured.
-          default_lang: en_US
+          # The default language used to generate the keys of the string resources.
+          # It must has a corresponding configuration in [input_path].
+          # The default value is "en" if not configured.
+          default_lang: en
