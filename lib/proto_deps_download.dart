@@ -21,7 +21,7 @@ Future<String> downloadProtoc(String protocVersion) async {
       protocTmpDir.create(recursive: true);
     }
 
-    Uri url = Uri.parse("https://github.com/protocolbuffers/protobuf/releases/download/v$protocVersion/protoc-$protocVersion-${_getPlatform(protocVersion)}.zip");
+    Uri url = Uri.parse("https://github.com/protocolbuffers/protobuf/releases/download/v$protocVersion/protoc-$protocVersion-${_getPlatform(true)}.zip");
     final archive = ZipDecoder().decodeBytes(await http.readBytes(url));
     for (final file in archive) {
       if (file.isFile) {
@@ -69,7 +69,9 @@ Future<String> downloadProtocGenDart(String protocGenDartVersion) async {
     }
 
     if (protocGenDart.existsSync()) {
-      await ProcessUtil.runCommand("chmod", ["+x", protocGenDart.path]);
+      if (!Platform.isWindows) {
+        await ProcessUtil.runCommand("chmod", ["+x", protocGenDart.path]);
+      }
       await ProcessUtil.runCommand("dart", ["pub", "get"],
         workingDirectory: protocGenDartTmpDir.path);
       return protocGenDart.path;
@@ -83,7 +85,7 @@ Future<String> downloadProtocGenGrpcJava(String protocGenGrpcJavaVersion) async 
   final Directory _protocGenGrpcJavaTmpDir = Directory(path.join(_builderTmpDir, "protoc_gen_grpc_java",
       "v$protocGenGrpcJavaVersion"));
 
-  final protocGenGrpcJavaName = "protoc-gen-grpc-java-$protocGenGrpcJavaVersion-${_getPlatform(protocGenGrpcJavaVersion)}.exe";
+  final protocGenGrpcJavaName = "protoc-gen-grpc-java-$protocGenGrpcJavaVersion-${_getPlatform(false)}.exe";
   final protocGenGrpcJava = File(
     path.join(_protocGenGrpcJavaTmpDir.path, protocGenGrpcJavaName),
   );
@@ -110,14 +112,14 @@ Future<String> downloadProtocGenGrpcJava(String protocGenGrpcJavaVersion) async 
   }
 }
 
-String _getPlatform(String protocVersion) {
+String _getPlatform(bool isProtoc) {
   String platform;
   switch(Platform.operatingSystem) {
     case "linux":
       platform = "linux-x86_64";
       break;
     case "windows":
-      platform = "win64";
+      platform = isProtoc ? "win64" : "windows-x86_64";
       break;
     case "macos":
       platform = "osx-x86_64";

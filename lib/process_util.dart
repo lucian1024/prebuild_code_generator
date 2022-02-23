@@ -7,7 +7,7 @@ extension ProcessUtil on Process {
       {String? workingDirectory,
       Map<String, String>? environment,
       bool includeParentEnvironment = true,
-      bool runInShell = false,
+      bool runInShell = true,
       Encoding? stdoutEncoding = systemEncoding,
       Encoding? stderrEncoding = systemEncoding}) async {
     final result = await Process.run(
