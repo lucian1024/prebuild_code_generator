@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package login;
+
+// generate java code
+option java_multiple_files = true;
+option java_package = "com.cat.protocol.login";
+
+// generagte oc code
+option objc_class_prefix = "Login";
+
+option go_package = "git.code.oa.com/cat/protocol/login";
+
+// The login service definition.
+service Login {
+    rpc Login (LoginReq) returns (LoginRsp) {
+    }
+}
+
+message LoginReq {}
+
+message LoginRsp {}

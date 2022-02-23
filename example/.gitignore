@@ -47,3 +47,4 @@ app.*.map.json
 
 lib/res_gen/
 lib/build.dart
+lib/proto_gen

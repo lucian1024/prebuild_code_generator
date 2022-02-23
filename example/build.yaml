@@ -4,6 +4,7 @@ targets:
       - $package$
       - lib/$lib$
       - assets/**
+      - proto/**
     builders:
       prebuild_code_generator:string_res_builder:
         options:
@@ -17,3 +18,18 @@ targets:
           # It must has a corresponding configuration in [input_path].
           # The default value is "en" if not configured.
           default_lang: en
+      prebuild_code_generator:proto_builder:
+        options:
+          proto_dir: "proto/"
+          protoc_version: "3.19.4"
+          dart:
+            enable: true
+            protoc_gen_dart_version: "20.0.0"
+            output_dir: "lib/proto_gen/"
+          java:
+            enable: true
+            protoc-gen-grpc-java: "1.44.0"
+            output_dir: "android/app/src/main/proto_gen/"
+          oc:
+            enable: true
+            output_dir: "ios/Classes/Protos/"
