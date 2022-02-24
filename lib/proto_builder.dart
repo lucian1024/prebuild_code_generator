@@ -20,6 +20,10 @@ class ProtoBuilder implements Builder {
       if (!dartOutputDir.endsWith("/")) {
         dartOutputDir += "/";
       }
+    } else {
+      dartEnable = false;
+      protocGenDartVersion = "";
+      dartOutputDir = "";
     }
 
     final javaMap = options.config["java"] as Map?;
@@ -30,6 +34,10 @@ class ProtoBuilder implements Builder {
       if (!javaOutputDir.endsWith("/")) {
         javaOutputDir += "/";
       }
+    } else {
+      javaEnable = false;
+      protocGenGrpcJavaVersion = "";
+      javaOutputDir = "";
     }
 
     final ocMap = options.config["oc"] as Map?;
@@ -39,10 +47,15 @@ class ProtoBuilder implements Builder {
       if (!ocOutputDir.endsWith("/")) {
         ocOutputDir += "/";
       }
+    } else {
+      ocEnable = false;
+      ocOutputDir = "";
     }
+
+    downloadDepsFuture = downloadDeps();
   }
 
-  late String? protoDir;
+  String? protoDir;
 
   late String protocVersion;
 
@@ -57,29 +70,52 @@ class ProtoBuilder implements Builder {
   late bool ocEnable;
   late String ocOutputDir;
 
+  String? protoc;
+  String? protocGenDart;
+  String? protocGenGrpcJava;
+  late Future<void> downloadDepsFuture;
+
   @override
   Future<void> build(BuildStep buildStep) async {
+    print("generate proto ${buildStep.inputId.path}");
     if ((!dartEnable && !javaEnable && !ocEnable) || protoDir == null) {
       return;
     }
 
-    final protoc = await downloadProtoc(protocVersion);
-    await Future.wait([_genDartCode(protoc, buildStep), _genJavaCode(protoc, buildStep), _genOcCode(protoc, buildStep)]);
+    // Read the input path to signal to the build graph that if the file changes
+    // then it should be rebuilt.
+    await buildStep.readAsString(buildStep.inputId);
+
+    await downloadDepsFuture;
+    await Future.wait([_genDartCode(buildStep), _genJavaCode(buildStep), _genOcCode(buildStep)]);
   }
 
-  Future<void> _genDartCode(String protoc, BuildStep buildStep) async {
+  Future<void> downloadDeps() async {
+    if ((!dartEnable && !javaEnable && !ocEnable) || protoDir == null) {
+      return;
+    }
+
+    protoc = await downloadProtoc(protocVersion);
+    if (dartEnable) {
+      protocGenDart = await downloadProtocGenDart(protocGenDartVersion);
+    }
+
+    if (javaEnable) {
+      protocGenGrpcJava = await downloadProtocGenGrpcJava(protocGenGrpcJavaVersion);
+    }
+  }
+
+  Future<void> _genDartCode(BuildStep buildStep) async {
     if (!dartEnable) {
       return;
     }
 
-    final protocGenDart = await downloadProtocGenDart(protocGenDartVersion);
-
     final dartGenDir = Directory(dartOutputDir);
     if (!dartGenDir.existsSync()) {
-      dartGenDir.create(recursive: true);
+      await dartGenDir.create(recursive: true);
     }
 
-    await ProcessUtil.runCommand(protoc, [
+    await ProcessUtil.runCommand(protoc!, [
       "--plugin=protoc-gen-dart=$protocGenDart",
       "--proto_path=$protoDir",
       "--dart_out=$dartOutputDir",
@@ -87,7 +123,7 @@ class ProtoBuilder implements Builder {
     ]);
   }
 
-  Future<void> _genJavaCode(String protoc, BuildStep buildStep) async {
+  Future<void> _genJavaCode(BuildStep buildStep) async {
     if (!javaEnable) {
       return;
     }
@@ -95,38 +131,39 @@ class ProtoBuilder implements Builder {
     final javaGenDir = Directory(path.join(javaOutputDir, "java"));
     final grpcGenDir = Directory(path.join(javaOutputDir, "grpc"));
     if (!javaGenDir.existsSync()) {
-      javaGenDir.create(recursive: true);
+      await javaGenDir.create(recursive: true);
     }
 
     if (!grpcGenDir.existsSync()) {
-      grpcGenDir.create(recursive: true);
+      await grpcGenDir.create(recursive: true);
     }
 
-    final protocGenGrpcJava = await downloadProtocGenGrpcJava(protocGenGrpcJavaVersion);
-    await ProcessUtil.runCommand(protoc, [
-      "--proto_path=$protoDir",
-      "--java_out=${javaGenDir.path}",
-      buildStep.inputId.path
-    ]);
-    await ProcessUtil.runCommand(protoc, [
-      "--plugin=protoc-gen-grpc-java=$protocGenGrpcJava",
-      "--proto_path=$protoDir",
-      "--grpc-java_out=${grpcGenDir.path}",
-      buildStep.inputId.path
+    await Future.wait([
+      ProcessUtil.runCommand(protoc!, [
+        "--proto_path=$protoDir",
+        "--java_out=${javaGenDir.path}",
+        buildStep.inputId.path
+      ]),
+      ProcessUtil.runCommand(protoc!, [
+        "--plugin=protoc-gen-grpc-java=$protocGenGrpcJava",
+        "--proto_path=$protoDir",
+        "--grpc-java_out=${grpcGenDir.path}",
+        buildStep.inputId.path
+      ])
     ]);
   }
 
-  Future<void> _genOcCode(String protoc, BuildStep buildStep) async {
+  Future<void> _genOcCode(BuildStep buildStep) async {
     if (!ocEnable) {
       return;
     }
 
     final ocGenDir = Directory(ocOutputDir);
     if (!ocGenDir.existsSync()) {
-      ocGenDir.create(recursive: true);
+      await ocGenDir.create(recursive: true);
     }
 
-    await ProcessUtil.runCommand(protoc, [
+    await ProcessUtil.runCommand(protoc!, [
       "--proto_path=$protoDir",
       "--objc_out=$ocOutputDir",
       buildStep.inputId.path

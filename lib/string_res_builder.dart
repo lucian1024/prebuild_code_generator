@@ -34,6 +34,7 @@ class StringResBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
+    print("string_res_builder: ${buildStep.inputId.path}");
     // every json file in the string resources paths will go here, but only generate
     // code for default language.
     if (buildStep.inputId.path == stringResPathMap?[defaultLang]) {

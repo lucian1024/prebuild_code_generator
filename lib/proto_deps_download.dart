@@ -18,7 +18,7 @@ Future<String> downloadProtoc(String protocVersion) async {
     return protoc.path;
   } else {
     if (!protocTmpDir.existsSync()) {
-      protocTmpDir.create(recursive: true);
+      await protocTmpDir.create(recursive: true);
     }
 
     Uri url = Uri.parse("https://github.com/protocolbuffers/protobuf/releases/download/v$protocVersion/protoc-$protocVersion-${_getPlatform(true)}.zip");
@@ -54,7 +54,7 @@ Future<String> downloadProtocGenDart(String protocGenDartVersion) async {
     return protocGenDart.path;
   } else {
     if (!protocGenDartTmpDir.existsSync()) {
-      protocGenDartTmpDir.create(recursive: true);
+      await protocGenDartTmpDir.create(recursive: true);
     }
 
     Uri url = Uri.parse("https://storage.googleapis.com/pub-packages/packages/protoc_plugin-$protocGenDartVersion.tar.gz");
@@ -94,7 +94,7 @@ Future<String> downloadProtocGenGrpcJava(String protocGenGrpcJavaVersion) async 
     return protocGenGrpcJava.path;
   } else {
     if (!_protocGenGrpcJavaTmpDir.existsSync()) {
-      _protocGenGrpcJavaTmpDir.create(recursive: true);
+      await _protocGenGrpcJavaTmpDir.create(recursive: true);
     }
 
     Uri url = Uri.parse("https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/$protocGenGrpcJavaVersion/$protocGenGrpcJavaName");
