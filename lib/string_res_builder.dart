@@ -6,6 +6,10 @@ import 'package:build/build.dart';
 
 class StringResBuilder implements Builder {
   StringResBuilder(BuilderOptions options) {
+    if (options.config.isEmpty) {
+      return;
+    }
+
     final inputPath = options.config["input_path"] as Map?;
     stringResPathMap = inputPath
         ?.map((key, value) => MapEntry(key as String, value as String));

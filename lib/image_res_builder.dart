@@ -6,16 +6,22 @@ import 'package:path/path.dart' as path;
 
 class ImageResBuilder implements Builder {
   ImageResBuilder(BuilderOptions options) {
-    imageDir = List.from(options.config["image_dir"]);
+    if (options.config.isEmpty) {
+      return;
+    }
+
+    imageDir = List.from(options.config["image_dir"] ?? <String>[]);
     genCodeDir = options.config["output_dir"] as String? ?? "lib/res_gen/";
 
     if (!genCodeDir.endsWith("/")) {
       genCodeDir += "/";
     }
 
-    Future(() async {
-      await _genImageCode();
-    });
+    if (imageDir.isNotEmpty) {
+      Future(() async {
+        await _genImageCode();
+      });
+    }
   }
 
   /// The asset image resources directory.

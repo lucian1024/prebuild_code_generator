@@ -8,6 +8,10 @@ import 'package:prebuild_code_generator/proto_deps_download.dart';
 
 class ProtoBuilder implements Builder {
   ProtoBuilder(BuilderOptions options) {
+    if (options.config.isEmpty) {
+      return;
+    }
+
     protoDir = options.config["proto_dir"] as String?;
 
     protocVersion = options.config["protoc_version"] as String? ?? "3.19.4";
