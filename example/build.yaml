@@ -3,7 +3,9 @@ targets:
     sources:
       - $package$
       - lib/$lib$
+      # Regex for the resources path
       - assets/**
+      # Regex for the proto path
       - proto/**
     builders:
       prebuild_code_generator:string_res_builder:
@@ -18,20 +20,33 @@ targets:
           # It must has a corresponding configuration in [input_path].
           # The default value is "en" if not configured.
           default_lang: en
+          # If set true, only the keys of the string resources will be generated. The loading code
+          # for string resources will not be generated.
+          only_gen_key: false
       prebuild_code_generator:proto_builder:
         options:
+          # The proto directory
           proto_dir: "proto/"
+          # The protoc version. see https://github.com/protocolbuffers/protobuf/releases
           protoc_version: "3.19.4"
           dart:
+            # Enable to generate dart code for proto
             enable: true
+            # The protoc_gen_dart version. see https://pub.dev/packages/protoc_plugin
             protoc_gen_dart_version: "20.0.0"
+            # The directory for the generated dart code
             output_dir: "lib/proto_gen/"
           java:
+            # Enable to generate java code for proto
             enable: true
+            # The protoc-gen-grpc-java version. see https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/
             protoc-gen-grpc-java: "1.44.0"
+            # The directory for the generated java code
             output_dir: "android/app/src/main/proto_gen/"
           oc:
+            # Enable to generate object-c code for proto
             enable: true
+            # The directory for the generated object-c code
             output_dir: "ios/Classes/Protos/"
       prebuild_code_generator:image_res_builder:
         options:

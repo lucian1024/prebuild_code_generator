@@ -30,7 +30,8 @@ class ProtoBuilder implements Builder {
     if (javaMap != null) {
       javaEnable = javaMap["enable"] ?? false;
       protocGenGrpcJavaVersion = javaMap["protoc-gen-grpc-java"] ?? "1.44.0";
-      javaOutputDir = javaMap["output_dir"] as String? ?? "android/app/src/main/proto_gen/";
+      javaOutputDir =
+          javaMap["output_dir"] as String? ?? "android/app/src/main/proto_gen/";
       if (!javaOutputDir.endsWith("/")) {
         javaOutputDir += "/";
       }
@@ -87,7 +88,11 @@ class ProtoBuilder implements Builder {
     await buildStep.readAsString(buildStep.inputId);
 
     await downloadDepsFuture;
-    await Future.wait([_genDartCode(buildStep), _genJavaCode(buildStep), _genOcCode(buildStep)]);
+    await Future.wait([
+      _genDartCode(buildStep),
+      _genJavaCode(buildStep),
+      _genOcCode(buildStep)
+    ]);
   }
 
   Future<void> downloadDeps() async {
@@ -101,7 +106,8 @@ class ProtoBuilder implements Builder {
     }
 
     if (javaEnable) {
-      protocGenGrpcJava = await downloadProtocGenGrpcJava(protocGenGrpcJavaVersion);
+      protocGenGrpcJava =
+          await downloadProtocGenGrpcJava(protocGenGrpcJavaVersion);
     }
   }
 

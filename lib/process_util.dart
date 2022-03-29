@@ -27,9 +27,9 @@ extension ProcessUtil on Process {
   }
 }
 
-
 class ProcessError extends Error {
-  ProcessError(this.workingDirectory, this.executable, this.arguments, this.result);
+  ProcessError(
+      this.workingDirectory, this.executable, this.arguments, this.result);
 
   final String? workingDirectory;
   final String executable;
