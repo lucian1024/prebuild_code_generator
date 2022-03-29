@@ -1,3 +1,4 @@
+import 'package:example/res_gen/image_res.g.dart';
 import 'package:example/res_gen/string_res.g.dart';
 import 'package:example/res_gen/string_res_key.g.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,21 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               StringRes.getString(StringResKey.hello, params: ["jack"]),
             ),
+            Image(
+              image: Assets.images.checkbtnChecked,
+              width: 40,
+              height: 40,
+            ),
+            Image(
+              image: Assets.images.close,
+              width: 40,
+              height: 40,
+            ),
+            Image(
+              image: Assets.animations.refreshLoading,
+              width: 40,
+              height: 40,
+            )
           ],
         ),
       ),

@@ -12,3 +12,9 @@ builders:
     build_extensions: {".json": [".g.dart"]}
     build_to: source
     auto_apply: dependents
+  image_res_builder:
+    import: "package:prebuild_code_generator/builder.dart"
+    builder_factories: [ "imageResBuilder" ]
+    build_extensions: { ".png": [ ".g.dart" ], ".jpg": [ ".g.dart" ], ".bmp": [ ".g.dart" ], ".webp": [ ".g.dart" ], ".gif": [ ".g.dart" ] }
+    build_to: source
+    auto_apply: dependents

@@ -33,3 +33,15 @@ targets:
           oc:
             enable: true
             output_dir: "ios/Classes/Protos/"
+      prebuild_code_generator:image_res_builder:
+        options:
+          # The asset image resources directory.
+          # You should also config it in pubspec.yaml, like this:
+          # To add assets to your application, add an assets section, like this:
+          #  assets:
+          #    - assets/images/
+          image_dir:
+            - "assets/images/"
+            - "assets/animations/"
+          # The directory for the generated code
+          output_dir: "lib/res_gen"
