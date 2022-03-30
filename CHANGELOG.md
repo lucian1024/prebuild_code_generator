@@ -5,3 +5,7 @@
 ## 0.1.1
 
 * Fix error when some builders not config.
+
+## 0.1.2
+
+* Fix error when some builders not config.

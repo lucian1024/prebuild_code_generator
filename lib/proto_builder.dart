@@ -83,7 +83,7 @@ class ProtoBuilder implements Builder {
   @override
   Future<void> build(BuildStep buildStep) async {
     print("generate proto ${buildStep.inputId.path}");
-    if ((!dartEnable && !javaEnable && !ocEnable) || protoDir == null) {
+    if (protoDir == null || (!dartEnable && !javaEnable && !ocEnable)) {
       return;
     }
 

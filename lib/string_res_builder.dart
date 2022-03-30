@@ -26,7 +26,7 @@ class StringResBuilder implements Builder {
 
   /// The strings resource paths for multi-language.
   /// The key is country code, the value is strings resource path.
-  late final Map<String, String>? stringResPathMap;
+  Map<String, String>? stringResPathMap;
 
   /// The directory for generated code
   late String genCodeDir;
