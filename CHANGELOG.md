@@ -9,3 +9,7 @@
 ## 0.1.2
 
 * Fix error when some builders not config.
+
+## 0.1.3
+
+* Support for custom extended `ImageProvider` classes.

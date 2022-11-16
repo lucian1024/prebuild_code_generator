@@ -1,6 +1,6 @@
 name: prebuild_code_generator
 description: A flutter package which support to generate code for protobuf, image and string resources before build.
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/lucian1024/prebuild_code_generator
 
 environment:
