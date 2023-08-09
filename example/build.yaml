@@ -33,7 +33,7 @@ targets:
             # Enable to generate dart code for proto
             enable: true
             # The protoc_gen_dart version. see https://pub.dev/packages/protoc_plugin
-            protoc_gen_dart_version: "20.0.0"
+            protoc_gen_dart_version: "21.0.2"
             # The directory for the generated dart code
             output_dir: "lib/proto_gen/"
           java:

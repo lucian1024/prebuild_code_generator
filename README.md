@@ -91,7 +91,7 @@ targets:
 Put the proto and resources in the corresponding directories configured in the `build.yaml`. Then run following command to generate code:
 
 ```shell
-flutter packages pub run build_runner build
+dart run build_runner build
 ```
 
 Use the generate code in the flutter project code. For more detail, see the (example)[https://github.com/lucian1024/prebuild_code_generator/tree/main/example]
