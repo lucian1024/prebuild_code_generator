@@ -61,7 +61,7 @@ Future<String> downloadProtocGenDart(String protocGenDartVersion) async {
     }
 
     Uri url = Uri.parse(
-        "https://storage.googleapis.com/pub-packages/packages/protoc_plugin-$protocGenDartVersion.tar.gz");
+        "https://storage.googleapis.com/dartlang-pub-public-packages/packages/protoc_plugin-$protocGenDartVersion.tar.gz");
     final gzData = GZipDecoder().decodeBytes(await http.readBytes(url));
     final archive = TarDecoder().decodeBytes(gzData);
     for (final file in archive) {

@@ -13,3 +13,7 @@
 ## 0.1.3
 
 * Support for custom extended `ImageProvider` classes.
+
+## 0.1.3
+
+* Update protoc_plugin download url.
