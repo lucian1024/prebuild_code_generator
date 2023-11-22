@@ -17,3 +17,7 @@
 ## 0.1.4
 
 * Update protoc_plugin download url.
+
+## 0.1.5
+
+* Update dependence versions.
